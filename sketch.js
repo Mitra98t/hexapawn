@@ -24,8 +24,14 @@ function setup() {
 
 function draw() {
     background(225)
-    table.show()
-    gameManager.update()
+    if(gameManager.checkWin() == 'w' || gameManager.checkWin() == 'b'){
+        table.showWin(gameManager.checkWin())
+    }
+    else{
+        table.show()
+        gameManager.update()
+    }
+
 }
 
 function mousePressed() {
@@ -34,12 +40,9 @@ function mousePressed() {
         return
     }
     let cell = cellFromCoords(mouseX, mouseY, gameManager.getCoord())
-    console.log(cell)
     if (cell == -1) return
 
     gameManager.toggleActive(cell.row, cell.col)
-
-    console.table(gameManager.getCoord())
 }
 
 function cellFromCoords(x, y, coord) {
