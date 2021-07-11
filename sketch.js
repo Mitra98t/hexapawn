@@ -29,9 +29,9 @@ function draw() {
 }
 
 function mousePressed() {
-    if(isResetPressed(mouseX, mouseY)){
+    if (isResetPressed(mouseX, mouseY)) {
         gameManager.reset()
-        return 
+        return
     }
     let cell = cellFromCoords(mouseX, mouseY, gameManager.getCoord())
     console.log(cell)
@@ -56,7 +56,8 @@ function cellFromCoords(x, y, coord) {
 }
 
 function isResetPressed(x, y) {
-    if(x > 10 && x < 110 && y > 10 && y < 110) return true
+    resetPos = table.getResetCoord()
+    if (x > resetPos.x && x < resetPos.x + resetPos.sizeX && y > resetPos.y && y < resetPos.y + resetPos.sizeY) return true
 
     return false
 }
