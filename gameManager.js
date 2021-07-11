@@ -1,7 +1,8 @@
 class GameManager {
-    constructor(coord) {
+    constructor(coord, boardSize) {
         this.coord = coord
         this.pawnSize = 125
+        this.cellsize = boardSize / this.coord.length
     }
 
     reset() {
@@ -13,6 +14,8 @@ class GameManager {
                     this.coord[i][j].pres = 'e'
                 if (i == 2)
                     this.coord[i][j].pres = 'w'
+
+                this.coord[i][j].active = false
             }
         }
         this.update()
@@ -28,12 +31,66 @@ class GameManager {
                 curX = this.coord[i][j].x
                 curY = this.coord[i][j].y
                 curPres = this.coord[i][j].pres
-                pawn = new Pawn(curX, curY, this.pawnSize, curPres)
 
+                if (this.coord[i][j].active) {
+                    fill(250, 250, 0, 100)
+                    noStroke()
+                    rect(curX - 100, curY - 100, this.cellsize)
+                }
+
+                pawn = new Pawn(curX, curY, this.pawnSize, curPres)
                 pawn.show()
-                
             }
         }
+    }
+
+    getCoord() { return this.coord }
+
+    toggleActive(r, c) {
+        if(this.coord[r][c].pres == 'e'){
+            if(this.isSomeActive() != -1){
+                let activeCoord = this.isSomeActive()
+                let type = this.coord[activeCoord.row][activeCoord.col].pres
+                this.coord[activeCoord.row][activeCoord.col].pres = 'e'
+                this.coord[activeCoord.row][activeCoord.col].active = false
+                this.coord[r][c].pres = type
+                return
+            }
+            return
+        }
+
+
+        if (this.coord[r][c].active)
+            this.coord[r][c].active = !this.coord[r][c].active
+        else if (this.isSomeActive() == -1){
+            console.log(this.isSomeActive())
+            this.coord[r][c].active = !this.coord[r][c].active
+        }
+        else{
+            let activeCoord = this.isSomeActive()
+            if(this.coord[activeCoord.row][activeCoord.col].pres == this.coord[r][c].pres){
+                this.coord[activeCoord.row][activeCoord.col].active = !this.coord[activeCoord.row][activeCoord.col].active
+                this.coord[r][c].active = !this.coord[r][c].active
+            }
+            else{
+                this.coord[r][c].pres = this.coord[activeCoord.row][activeCoord.col].pres
+                this.coord[activeCoord.row][activeCoord.col].pres = 'e'
+                this.coord[activeCoord.row][activeCoord.col].active = !this.coord[activeCoord.row][activeCoord.col].active
+            }
+        }
+
+        return
+    }
+
+    isSomeActive() {
+        for(let i = 0; i < this.coord.length; i++){
+            for(let j = 0; j < this.coord.length; j++){
+                if(this.coord[i][j].active)
+                    return {row: i, col: j}
+            }
+        }
+
+        return -1
     }
 }
 
@@ -63,11 +120,5 @@ class Pawn {
         }
 
         ellipse(this.x, this.y, this.size)
-    }
-
-    clicked() {
-        if (dist(mouseX, mouseY, this.x, this.y) < this.size/2) {
-            console.log("pawn")
-        }
     }
 }
