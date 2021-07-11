@@ -7,7 +7,7 @@ class Table {
 
     show() {
         this.createReset()
-        
+
         stroke(0)
         strokeWeight(4)
         fill(255)
@@ -27,14 +27,19 @@ class Table {
         }
     }
 
-    createReset(){
-        fill(255, 255, 0)
+    createReset() {
+        fill(255, 50, 0)
         stroke(0)
         strokeWeight(4)
-        rect(10, 10, 100)
-        
+        rect(10, 10, 210, 60)
+
         fill(0)
+        strokeWeight(2)
         textSize(32);
-        text('Reset Game', 10, 30);
+        text('Reset Game', 25, 50);
+    }
+
+    getResetCoord() {
+        return { x: 10, y: 10, sizeX: 210, sizeY: 60 }
     }
 }
