@@ -157,46 +157,42 @@ class GameManager {
 
         for (let i = 0; i < this.coord.length; i++) {
             for (let j = 0; j < this.coord.length; j++) {
-                if (i != 0) {
-                    if (this.coord[i][j].pres == 'w') {
-                        if (j != 0 && j != 2) {
-                            if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j - 1].pres == 'b' || this.coord[i - 1][j + 1].pres == 'b')
-                                whiteMove++
-                        }
-                        if (j == 0) {
-                            if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j + 1].pres == 'b')
-                                whiteMove++
-                        }
-                        if (j == 3) {
-                            if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j - 1].pres == 'b')
-                                whiteMove++
-                        }
+                if (this.coord[i][j].pres == 'w') {
+                    if (j != 0 && j != 2) {
+                        if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j - 1].pres == 'b' || this.coord[i - 1][j + 1].pres == 'b')
+                            whiteMove++
+                    }
+                    if (j == 0) {
+                        if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j + 1].pres == 'b')
+                            whiteMove++
+                    }
+                    if (j == 2) {
+                        if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j - 1].pres == 'b')
+                            whiteMove++
                     }
                 }
-                if (i != 2) {
-                    if (this.coord[i][j].pres == 'b') {
-                        if (j != 0 && j != 2) {
-                            if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j - 1].pres == 'w' || this.coord[i + 1][j + 1].pres == 'w')
-                                blackMove++
-                        }
-                        if (j == 0) {
-                            if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j + 1].pres == 'w')
-                                whiteMove++
-                        }
-                        if (j == 3) {
-                            if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j - 1].pres == 'w')
-                                whiteMove++
-                        }
+                if (this.coord[i][j].pres == 'b') {
+                    if (j != 0 && j != 2) {
+                        if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j - 1].pres == 'w' || this.coord[i + 1][j + 1].pres == 'w')
+                            blackMove++
+                    }
+                    if (j == 0) {
+                        if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j + 1].pres == 'w')
+                            blackMove++
+                    }
+                    if (j == 2) {
+                        if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j - 1].pres == 'w')
+                            blackMove++
                     }
                 }
             }
         }
 
         if (blackMove == 0 && whiteMove == 0) {
-            if (this.getTurn() == 'w'){
+            if (this.getTurn() == 'w') {
                 return 'b'
             }
-            if (this.getTurn() == 'b'){
+            if (this.getTurn() == 'b') {
                 return 'w'
             }
         }
