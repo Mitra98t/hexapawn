@@ -6,6 +6,8 @@ class Table {
     }
 
     show() {
+        this.createReset()
+        
         stroke(0)
         strokeWeight(4)
         fill(255)
@@ -25,4 +27,10 @@ class Table {
         }
     }
 
+    createReset(){
+        fill(255, 0, 0)
+        stroke(0)
+        strokeWeight(4)
+        rect(10, 10, 100)
+    }
 }

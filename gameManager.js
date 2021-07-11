@@ -3,6 +3,8 @@ class GameManager {
         this.coord = coord
         this.pawnSize = 125
         this.cellsize = boardSize / this.coord.length
+        // true white - false black
+        this.turn = true
     }
 
     reset() {
@@ -18,6 +20,7 @@ class GameManager {
                 this.coord[i][j].active = false
             }
         }
+        this.turn = true
         this.update()
     }
 
@@ -47,13 +50,17 @@ class GameManager {
     getCoord() { return this.coord }
 
     toggleActive(r, c) {
-        if(this.coord[r][c].pres == 'e'){
-            if(this.isSomeActive() != -1){
+        if (this.getTurn() != this.coord[r][c].pres && this.isSomeActive() == -1) return
+
+        if (this.coord[r][c].pres == 'e') {
+            if (this.isSomeActive() != -1) {
                 let activeCoord = this.isSomeActive()
+                if(!this.isMoveOk(activeCoord.row, activeCoord.col, r, c)) return
                 let type = this.coord[activeCoord.row][activeCoord.col].pres
                 this.coord[activeCoord.row][activeCoord.col].pres = 'e'
                 this.coord[activeCoord.row][activeCoord.col].active = false
                 this.coord[r][c].pres = type
+                this.nextTurn()
                 return
             }
             return
@@ -62,20 +69,22 @@ class GameManager {
 
         if (this.coord[r][c].active)
             this.coord[r][c].active = !this.coord[r][c].active
-        else if (this.isSomeActive() == -1){
+        else if (this.isSomeActive() == -1) {
             console.log(this.isSomeActive())
             this.coord[r][c].active = !this.coord[r][c].active
         }
-        else{
+        else {
             let activeCoord = this.isSomeActive()
-            if(this.coord[activeCoord.row][activeCoord.col].pres == this.coord[r][c].pres){
+            if (this.coord[activeCoord.row][activeCoord.col].pres == this.coord[r][c].pres) {
                 this.coord[activeCoord.row][activeCoord.col].active = !this.coord[activeCoord.row][activeCoord.col].active
                 this.coord[r][c].active = !this.coord[r][c].active
             }
-            else{
+            else {
+                if(!this.isMoveOk(activeCoord.row, activeCoord.col, r, c)) return
                 this.coord[r][c].pres = this.coord[activeCoord.row][activeCoord.col].pres
                 this.coord[activeCoord.row][activeCoord.col].pres = 'e'
                 this.coord[activeCoord.row][activeCoord.col].active = !this.coord[activeCoord.row][activeCoord.col].active
+                this.nextTurn()
             }
         }
 
@@ -83,42 +92,59 @@ class GameManager {
     }
 
     isSomeActive() {
-        for(let i = 0; i < this.coord.length; i++){
-            for(let j = 0; j < this.coord.length; j++){
-                if(this.coord[i][j].active)
-                    return {row: i, col: j}
+        for (let i = 0; i < this.coord.length; i++) {
+            for (let j = 0; j < this.coord.length; j++) {
+                if (this.coord[i][j].active)
+                    return { row: i, col: j }
             }
         }
 
         return -1
     }
-}
 
-class Pawn {
-    constructor(x, y, size, pres) {
-        this.x = x
-        this.y = y
-        this.size = size
-        this.pres = pres
+    nextTurn() {
+        this.turn = !this.turn
+        return this.turn
     }
 
-    show() {
-        strokeWeight(4)
-        switch (this.pres) {
-            case 'b':
-                fill(0)
-                stroke(255)
-                break;
-            case 'w':
-                fill(255)
-                stroke(0)
-                break;
-            case 'e':
-                noFill()
-                noStroke()
-                break;
-        }
+    getTurn() {
+        return this.turn ? 'w' : 'b'
+    }
 
-        ellipse(this.x, this.y, this.size)
+    isMoveOk(sR, sC, fR, fC) {
+        console.log(sR, sC, fR, fC)
+        if (sC == fC) {
+            if (this.coord[sR][sC].pres == 'w') {
+                if (sR == fR + 1) {
+                    if (this.coord[fR][fC].pres == 'e')
+                        return true
+                }
+            }
+            else{
+                if (sR == fR - 1) {
+                    if (this.coord[fR][fC].pres == 'e')
+                        return true
+                }
+            }
+            return false
+        }
+        else{
+            if(sC == fC + 1 || sC == fC - 1){
+                if (this.coord[sR][sC].pres == 'w') {
+                    if (sR == fR + 1) {
+                        if (this.coord[fR][fC].pres == 'b')
+                            return true
+                    }
+                }
+                else{
+                    if (sR == fR - 1) {
+                        if (this.coord[fR][fC].pres == 'w')
+                            return true
+                    }
+                }
+                return false
+            }
+        }
+        return false
     }
 }

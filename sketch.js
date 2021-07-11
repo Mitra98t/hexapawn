@@ -23,12 +23,16 @@ function setup() {
 }
 
 function draw() {
-    background(225);
+    background(225)
     table.show()
     gameManager.update()
 }
 
 function mousePressed() {
+    if(isResetPressed(mouseX, mouseY)){
+        gameManager.reset()
+        return 
+    }
     let cell = cellFromCoords(mouseX, mouseY, gameManager.getCoord())
     console.log(cell)
     if (cell == -1) return
@@ -49,4 +53,10 @@ function cellFromCoords(x, y, coord) {
         }
     }
     return col == -1 ? col : { row: Number(row), col: Number(col) }
+}
+
+function isResetPressed(x, y) {
+    if(x > 10 && x < 110 && y > 10 && y < 110) return true
+
+    return false
 }
