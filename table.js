@@ -32,5 +32,9 @@ class Table {
         stroke(0)
         strokeWeight(4)
         rect(10, 10, 100)
+        
+        fill(0)
+        textSize(32);
+        text('Reset Game', 10, 30);
     }
 }
