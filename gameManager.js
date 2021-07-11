@@ -55,7 +55,7 @@ class GameManager {
         if (this.coord[r][c].pres == 'e') {
             if (this.isSomeActive() != -1) {
                 let activeCoord = this.isSomeActive()
-                if(!this.isMoveOk(activeCoord.row, activeCoord.col, r, c)) return
+                if (!this.isMoveOk(activeCoord.row, activeCoord.col, r, c)) return
                 let type = this.coord[activeCoord.row][activeCoord.col].pres
                 this.coord[activeCoord.row][activeCoord.col].pres = 'e'
                 this.coord[activeCoord.row][activeCoord.col].active = false
@@ -70,7 +70,6 @@ class GameManager {
         if (this.coord[r][c].active)
             this.coord[r][c].active = !this.coord[r][c].active
         else if (this.isSomeActive() == -1) {
-            console.log(this.isSomeActive())
             this.coord[r][c].active = !this.coord[r][c].active
         }
         else {
@@ -80,7 +79,7 @@ class GameManager {
                 this.coord[r][c].active = !this.coord[r][c].active
             }
             else {
-                if(!this.isMoveOk(activeCoord.row, activeCoord.col, r, c)) return
+                if (!this.isMoveOk(activeCoord.row, activeCoord.col, r, c)) return
                 this.coord[r][c].pres = this.coord[activeCoord.row][activeCoord.col].pres
                 this.coord[activeCoord.row][activeCoord.col].pres = 'e'
                 this.coord[activeCoord.row][activeCoord.col].active = !this.coord[activeCoord.row][activeCoord.col].active
@@ -112,7 +111,6 @@ class GameManager {
     }
 
     isMoveOk(sR, sC, fR, fC) {
-        console.log(sR, sC, fR, fC)
         if (sC == fC) {
             if (this.coord[sR][sC].pres == 'w') {
                 if (sR == fR + 1) {
@@ -120,7 +118,7 @@ class GameManager {
                         return true
                 }
             }
-            else{
+            else {
                 if (sR == fR - 1) {
                     if (this.coord[fR][fC].pres == 'e')
                         return true
@@ -128,15 +126,15 @@ class GameManager {
             }
             return false
         }
-        else{
-            if(sC == fC + 1 || sC == fC - 1){
+        else {
+            if (sC == fC + 1 || sC == fC - 1) {
                 if (this.coord[sR][sC].pres == 'w') {
                     if (sR == fR + 1) {
                         if (this.coord[fR][fC].pres == 'b')
                             return true
                     }
                 }
-                else{
+                else {
                     if (sR == fR - 1) {
                         if (this.coord[fR][fC].pres == 'w')
                             return true
@@ -146,5 +144,63 @@ class GameManager {
             }
         }
         return false
+    }
+
+    checkWin() {
+        for (let i = 0; i < this.coord.length; i++) {
+            if (this.coord[0][i].pres == 'w') return 'w'
+            if (this.coord[this.coord.length - 1][i].pres == 'b') return 'b'
+        }
+
+        let blackMove = 0
+        let whiteMove = 0
+
+        for (let i = 0; i < this.coord.length; i++) {
+            for (let j = 0; j < this.coord.length; j++) {
+                if (i != 0) {
+                    if (this.coord[i][j].pres == 'w') {
+                        if (j != 0 && j != 2) {
+                            if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j - 1].pres == 'b' || this.coord[i - 1][j + 1].pres == 'b')
+                                whiteMove++
+                        }
+                        if (j == 0) {
+                            if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j + 1].pres == 'b')
+                                whiteMove++
+                        }
+                        if (j == 3) {
+                            if (this.coord[i - 1][j].pres == 'e' || this.coord[i - 1][j - 1].pres == 'b')
+                                whiteMove++
+                        }
+                    }
+                }
+                if (i != 2) {
+                    if (this.coord[i][j].pres == 'b') {
+                        if (j != 0 && j != 2) {
+                            if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j - 1].pres == 'w' || this.coord[i + 1][j + 1].pres == 'w')
+                                blackMove++
+                        }
+                        if (j == 0) {
+                            if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j + 1].pres == 'w')
+                                whiteMove++
+                        }
+                        if (j == 3) {
+                            if (this.coord[i + 1][j].pres == 'e' || this.coord[i + 1][j - 1].pres == 'w')
+                                whiteMove++
+                        }
+                    }
+                }
+            }
+        }
+
+        if (blackMove == 0 && whiteMove == 0) {
+            if (this.getTurn() == 'w'){
+                return 'b'
+            }
+            if (this.getTurn() == 'b'){
+                return 'w'
+            }
+        }
+
+        return -1
     }
 }

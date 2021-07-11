@@ -27,6 +27,31 @@ class Table {
         }
     }
 
+    showWin(winT){
+        this.createReset()
+
+        if(winT == 'w'){
+            fill(0, 255, 0)
+            stroke(0)
+            strokeWeight(4)
+            rect(this.relX, this.relY, this.size)
+            fill(0)
+            strokeWeight(2)
+            textSize(40);
+            text("Bianco Vince!", this.relX+200, this.relY+280);
+        }
+        else{
+            fill(0, 255, 0)
+            stroke(0)
+            strokeWeight(4)
+            rect(this.relX, this.relY, this.size)
+            fill(0)
+            strokeWeight(2)
+            textSize(40);
+            text("Nero Vince!", this.relX+200, this.relY+280);
+        }
+    }
+
     createReset() {
         fill(255, 50, 0)
         stroke(0)
